@@ -320,8 +320,8 @@ public class TurtleSoup {
     public static void drawPersonalArt(Turtle turtle) {
         
         
-        List<Integer> starX=Arrays.asList(4,3,1,3,4,5,7,5,4); //don't ask me why I didn't start at 0 ! XD
-        List<Integer> starY=Arrays.asList(1,3,4,5,7,5,4,3,1);
+        List<Integer> starX=Arrays.asList(0,-1,-3,-1,0,1,3,1,0); //don't ask me why I didn't start at 0 ! XD
+        List<Integer> starY=Arrays.asList(0,2,3,4,6,4,3,2,0);
         
         List<Double> headingAdjustments=calculateHeadings(starX, starY);
         
