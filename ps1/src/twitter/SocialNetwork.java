@@ -3,10 +3,21 @@
  */
 package twitter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Collections;
+import static java.util.stream.Collectors.*;
+import java.util.Iterator;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import static java.util.Map.Entry.*;
+import java.util.TreeMap;
+//import java.util.HashSet;
 /**
  * SocialNetwork provides methods that operate on a social network.
  * 
@@ -41,7 +52,46 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        
+        Map<String, Set<String>> followsGraph = new HashMap<String, Set<String>>();
+        
+        for (int i=0 ; i<tweets.size() ; i++){
+            
+            Tweet this_tweet = tweets.get(i);
+            Set<String> these_mentions = Extract.getMentionedUsers(Arrays.asList(this_tweet));
+            
+            if (followsGraph.containsKey(this_tweet.getAuthor())){
+
+                if (these_mentions.isEmpty()){
+                    
+                    continue;
+                    
+                } else {
+                                       
+                    Set<String> existing_mentions = new HashSet<String>(followsGraph.get(this_tweet.getAuthor()));
+                    existing_mentions.addAll(these_mentions);                    
+                    followsGraph.put(this_tweet.getAuthor(), existing_mentions);
+                                        
+                }
+                
+            } else {
+                
+                if (these_mentions.isEmpty()){
+                    
+                    continue;
+                    
+                } else {
+                                        
+                    followsGraph.put(this_tweet.getAuthor(), these_mentions);
+                    
+                }
+                    
+            }                   
+            
+        }
+
+        return followsGraph;
+     
     }
 
     /**
@@ -54,7 +104,41 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+        
+                
+        List<String> keys = new ArrayList<String>();
+        keys.addAll(followsGraph.keySet());
+        List<String> followings = new ArrayList<String>();
+        
+        
+        for (int i=0; i < keys.size() ; i++){
+
+            followings.addAll(followsGraph.get(keys.get(i)));
+
+        }
+          
+        
+        Set<String> distinct = new HashSet<>(followings);
+        Map<String, Integer> numberfollowersGraph = new HashMap<String, Integer>();
+        
+        for (String s: distinct) {
+            
+            numberfollowersGraph.put(s, Collections.frequency(followings, s));
+            
+        }
+            
+      Map<String, Integer> sorted = numberfollowersGraph
+              .entrySet()
+              .stream()
+              .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+              .collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2,LinkedHashMap::new));
+
+      List<String> sorted_keys = new ArrayList<String>();
+      sorted_keys.addAll(sorted.keySet());
+
+      return sorted_keys;   
+      
+        
     }
 
 }

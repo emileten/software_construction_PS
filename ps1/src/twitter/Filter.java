@@ -4,6 +4,10 @@
 package twitter;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.time.Instant;
+import java.util.regex.*;
+import static org.junit.Assert.*;
 
 /**
  * Filter consists of methods that filter a list of tweets for those matching a
@@ -27,7 +31,29 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        
+        
+        for (int i=0 ; i<username.length() ; i++){ //verify legality of each character in username
+       
+            assertTrue("expected the username to contain only legal username characters", Extract.getLegalAuthorChar().contains(String.valueOf(username.charAt(i))));            
+      
+        }
+        
+        
+        List<Tweet> tweets_of_username = new ArrayList<Tweet>();
+
+        for (int i=0 ; i<tweets.size() ; i++){
+                               
+            if (tweets.get(i).getAuthor()==username){
+                
+                tweets_of_username.add(tweets.get(i));
+                
+            }
+            
+        }
+        
+        return tweets_of_username;
+        
     }
 
     /**
@@ -41,7 +67,25 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+
+       
+        List<Tweet> tweets_in_timespan = new ArrayList<Tweet>();
+
+        for(int i=0 ; i<tweets.size() ; i++){
+                
+            Instant this_timestamp = tweets.get(i).getTimestamp();          
+            boolean in_timespan_open = this_timestamp.isAfter(timespan.getStart()) && this_timestamp.isBefore(timespan.getEnd()) ;
+            boolean in_timespan_closed = in_timespan_open || this_timestamp.equals(timespan.getStart()) ||  this_timestamp.equals(timespan.getEnd());
+            
+            if (in_timespan_closed){
+                
+                tweets_in_timespan.add(tweets.get(i));
+                
+            }
+            
+        }
+        
+        return tweets_in_timespan;
     }
 
     /**
@@ -60,7 +104,70 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        
+       
+        
+        assertFalse("expected non empty word list", words.isEmpty());
+        
+        
+        for (int i=0 ; i<words.size() ; i++){ //verify legality of words list
+       
+            assertFalse("expected word without space", words.get(i).contains(String.valueOf(' ')));
+      
+        }
+        
+        List<Tweet> tweets_containing = new ArrayList<Tweet>();
+
+        for(int i=0 ; i<tweets.size() ; i++){
+                
+            String this_text = new String(tweets.get(i).getText()).toLowerCase(); // 'toLowerCase' applies to 'word' as well, to ensure test is case-insensitive. 'New' because I am modifying.          
+            boolean contains=false;
+            int j=0;
+            
+            while(!contains && j<words.size()){
+                
+                String this_word = words.get(j).toLowerCase();
+                contains=LegallyContaining(this_text, this_word);
+                j = j + 1;
+                
+            }
+            
+            if (contains){
+ 
+                tweets_containing.add(tweets.get(i));
+ 
+            }
+            
+        }
+        
+        return tweets_containing;
+        
     }
 
+    
+
+    /**
+     * Tests legal presence of a String in another String.
+     * 
+     * @param sentence
+     *            a string
+     * @param word
+     *            a string           
+     * @return boolean, indicating whether a 'whole word' is present in sentence. 
+     */ 
+    public static boolean LegallyContaining(String sentence, String word) {
+        
+        String pattern = "\\b" + word + "\\b";
+        Pattern p = Pattern.compile(pattern);
+        Matcher m= p.matcher(sentence);
+        boolean result = m.find();
+        return result;
+        
+    }
+
+   
 }
+        
+ 
+    
+    
