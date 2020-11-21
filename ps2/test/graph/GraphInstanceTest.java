@@ -20,7 +20,12 @@ import org.junit.Test;
 public abstract class GraphInstanceTest {
     
     // Testing strategy
-    //   TODO
+    //  add a vertex
+    //  add an edge
+    //  remove a vertex
+    //  get all vertices
+    //  get one set of sources
+    //  get one set of targets
     
     /**
      * Overridden by implementation-specific test classes.
@@ -36,11 +41,92 @@ public abstract class GraphInstanceTest {
     
     @Test
     public void testInitialVerticesEmpty() {
-        // TODO you may use, change, or remove this test
         assertEquals("expected new graph to have no vertices",
                 Collections.emptySet(), emptyInstance().vertices());
     }
     
-    // TODO other tests for instance methods of Graph
     
+    @Test
+    public void testAddVertex() {
+        
+        Graph<String> mygraph = emptyInstance();
+        
+        assertTrue("didn't expect this graph to contain this vertex, should have added it",
+                mygraph.add("Chicago"));
+        
+        mygraph.add("Chicago");
+
+        assertFalse("expected this graph to contain Chicago", mygraph.add("Chicago"));
+        
+    }
+    
+    
+    @Test
+    public void testAddEdge() {
+        
+        Graph<String> mygraph = emptyInstance();
+        assertEquals("didn't expect this edge to exist",
+               0, mygraph.set("Chicago", "Milwaukee", 92));
+        
+    }
+    
+    
+    @Test
+    public void testRemoveVertex() {
+        
+        Graph<String> mygraph = emptyInstance();
+        mygraph.add("Chicago");
+        mygraph.add("Milwaukee");
+        mygraph.set("Chicago", "Milwaukee", 92);
+        
+        assertTrue("expected this graph to contain Chicago", mygraph.remove("Chicago"));
+        
+        assertTrue("didn't expect this graph to contain Chicago",
+                mygraph.add("Chicago"));
+
+    }
+    
+    @Test
+    public void testGetVertices() {
+        
+        
+        Graph<String> mygraph = emptyInstance();
+        mygraph.add("Chicago");
+        mygraph.add("Milwaukee");
+        mygraph.set("Chicago", "Milwaukee", 92);
+        assertTrue("expected the graph to contain Chicago and Milwaukee", mygraph.vertices().contains("Chicago") && mygraph.vertices().contains("Milwaukee")) ;
+
+    }
+    
+    @Test
+    public void testGetSources() {
+  
+ 
+        Graph<String> mygraph = emptyInstance();
+        mygraph.add("Chicago");
+        mygraph.add("Milwaukee");
+        mygraph.set("Chicago", "Milwaukee", 92);
+ 
+       
+        assertTrue("expected the source of Milwaukee to be Chicago", mygraph.sources("Milwaukee").containsKey("Chicago")) ;
+        assertTrue("expected the distance from Chicago to Milwaukee to be 92 miles", mygraph.sources("Milwaukee").get("Chicago")==92);
+
+    }
+    
+    @Test
+    public void testGetTargets() {
+
+        Graph<String> mygraph = emptyInstance();
+        mygraph.add("Chicago");
+        mygraph.add("Milwaukee");
+        mygraph.set("Chicago", "Milwaukee", 92);
+ 
+       
+        assertTrue("expected the target of Chicago to be Milwaukee", mygraph.targets("Chicago").containsKey("Milwaukee")) ;
+        assertTrue("expected the distance from Milwaukee to Chicago to be 92 miles", mygraph.targets("Chicago").get("Milwaukee")==92);
+      
+    }
+    
+    
+       
 }
