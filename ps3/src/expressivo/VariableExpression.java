@@ -40,12 +40,29 @@ public class VariableExpression implements Expression {
      * @param str
      * @return true if str is alphabetic
      */
-    public static boolean isAlpha(String str){
-        
+    public static boolean isAlpha(String str){      
         return ((!str.equals("")) 
                 && (str != null) 
-                && (str.matches("^[a-zA-Z]*$"))); 
-        
+                && (str.matches("^[a-zA-Z]*$")));        
+    }
+    
+    @Override 
+    public String toString(){        
+        return new String(symbol);
+    }
+    
+    @Override 
+    public boolean equals(Object thatObject){        
+        if (thatObject instanceof Expression){
+            return thatObject.toString()==this.toString();
+        } else {
+            return false;
+        }       
+    }
+    
+    @Override
+    public int hashCode(){        
+        return symbol.hashCode();        
     }
 
 }

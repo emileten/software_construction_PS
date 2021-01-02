@@ -32,6 +32,8 @@ public interface Expression {
     /**
      * @return a parsable representation of this expression, such that
      * for all e:Expression, e.equals(Expression.parse(e.toString())).
+     * initial whitespaces and parentheses are ignored, and the output 
+     * surrounds + with spaces but not *
      */
     @Override 
     public String toString();

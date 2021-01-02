@@ -23,5 +23,26 @@ public class EmptyExpression implements Expression {
     public boolean isConstant() {
         return false;
     }
+    
+    @Override
+    public String toString(){       
+        return "";        
+    }
+    
+    @Override 
+    public boolean equals(Object thatObject){
+        
+        if (thatObject instanceof EmptyExpression){
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    
+    @Override
+    public int hashCode(){       
+        return 1;       
+    }
 
 }

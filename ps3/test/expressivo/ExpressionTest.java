@@ -15,7 +15,7 @@ public class ExpressionTest {
     // Testing strategy 
     
     // HashCode() and equals()
-    // 'general case' : x*2*3 + y != x*6 + y - 0.2
+    // 'general case' : x*2*3 + y != x*6 + y + 0.2
     // 1+x != x+1
     // 1+x == (1+x)
     // 1*x == (1*x)
@@ -25,13 +25,7 @@ public class ExpressionTest {
     // (3 + 4) + 5 == 3 + (4+5)
     
     // toString()
-    // empty expression 
-    // +
-    // * 
-    // +, *
-    // +, *, ()
-    // +, *, (), variables
-    // +, *, (), variables, doubles with decimals
+    // (x * 6) + (y + 0.2) --> "x*6 + y + 0.2"
     
     // isEmpty()
     // "" -> empty
@@ -64,80 +58,58 @@ public class ExpressionTest {
     }
     
     @Test
-    public void testExpressionEquals() { 
-        
-        assertTrue("expected x*2*3 + y != x*6 + y - 0.2", !Expression.parse("x*2*3 + y").equals(Expression.parse("x*6 + y - 0.2")));        
+    public void testExpressionEquals() {        
+        assertTrue("expected x*2*3 + y != x*6 + y + 0.2", !Expression.parse("x*2*3 + y").equals(Expression.parse("x*6 + y + 0.2")));        
         assertTrue("expected 1+x != x+1", !Expression.parse("1+x").equals(Expression.parse("x+1")));
-        assertTrue("expected 1+x == (1+x)", !Expression.parse("1+x").equals(Expression.parse("(1+x)")));
-        assertTrue("expected 1*x == (1*x)", !Expression.parse("1*x").equals(Expression.parse("(1*x)")));
-        assertTrue("expected 1+x == (1) + (x)", !Expression.parse("1+x").equals(Expression.parse("(1) + (x)")));
-        assertTrue("expected 3 + 4 + 5 == (3+4+5)", !Expression.parse("3 + 4 + 5").equals(Expression.parse("(3+4+5)")));
-        assertTrue("expected x+1==x+1.000", !Expression.parse("x+1").equals(Expression.parse("x+1.000")));
-        assertTrue("expected (3 + 4) + 5 == 3+(4+5)", !Expression.parse("(3+4) + 5").equals(Expression.parse("3+(4+5)")));
-
+        assertTrue("expected 1+x == (1+x)", Expression.parse("1+x").equals(Expression.parse("(1+x)")));
+        assertTrue("expected 1*x == (1*x)", Expression.parse("1*x").equals(Expression.parse("(1*x)")));
+        assertTrue("expected 1+x == (1) + (x)", Expression.parse("1+x").equals(Expression.parse("(1) + (x)")));
+        assertTrue("expected 3 + 4 + 5 == (3+4+5)", Expression.parse("3 + 4 + 5").equals(Expression.parse("(3+4+5)")));
+        assertTrue("expected x+1==x+1.000", Expression.parse("x+1").equals(Expression.parse("x+1.000")));
+        assertTrue("expected (3 + 4) + 5 == 3+(4+5)", Expression.parse("(3+4) + 5").equals(Expression.parse("3+(4+5)")));
     } 
     
     @Test
-    public void testExpressionHashCode() { 
-        
-        assertTrue("expected hash code of (3 + 4) + 5 to be equal to hash code of 3+(4+5)", Expression.parse("(3+4) + 5").hashCode()!=Expression.parse("3+(4+5)").hashCode());
-
+    public void testExpressionHashCode() {        
+        assertTrue("expected hash code of (3 + 4) + 5 to be equal to hash code of 3+(4+5)", Expression.parse("(3+4) + 5").hashCode()==Expression.parse("3+(4+5)").hashCode());
     } 
     
     @Test
     public void testExpressionToString() { 
-   
-        String StrExpr = "x*6 + y - 0.2";
-        Expression Expr = Expression.parse(StrExpr);
-        assertTrue("expected parsed String version of the x*6 + y - 0.2 expression to be equal to that expression", Expr.equals(Expression.parse(StrExpr)));
-        
-        
+        assertTrue("expected String version of pasrsed '(x*6) + (y + 0.2)' to be equal to 'x*6 + y + 0.2'", Expression.parse("(x * 6) + (y + 0.2)").toString()=="x*6 + y + 0.2");               
     } 
     
     @Test
-    public void testExpressionIsEmpty() { 
-  
+    public void testExpressionIsEmpty() {   
         assertTrue("this should be an empty expression", Expression.parse("").isEmpty());
-        assertFalse("this should be a non-empty expression", Expression.parse("x*3").isEmpty());
-
-        
+        assertFalse("this should be a non-empty expression", Expression.parse("x*3").isEmpty());      
     } 
     
     @Test
-    public void testExpressionIsVariable() { 
-        
+    public void testExpressionIsVariable() {        
         assertTrue("this should be a variable", Expression.parse("x").isEmpty());
         assertTrue("this should be a variable", Expression.parse("y").isEmpty());
         assertFalse("this should not be a variable", Expression.parse("3").isEmpty());
-        assertFalse("this should not be a variable", Expression.parse("x*3").isEmpty());
-    
+        assertFalse("this should not be a variable", Expression.parse("x*3").isEmpty());   
     } 
     
     @Test
-    public void testExpressionIsConstant() { 
-        
- 
+    public void testExpressionIsConstant() {        
         assertTrue("this should be a constant", Expression.parse("3").isEmpty());
         assertTrue("this should be a constant", Expression.parse("4").isEmpty());
         assertFalse("this should not be a constant", Expression.parse("3+4").isEmpty());
-        assertFalse("this should not be a constant", Expression.parse("x*3").isEmpty());
-        
-        
+        assertFalse("this should not be a constant", Expression.parse("x*3").isEmpty());            
     } 
     
     
     @Test
-    public void testIsAlpha() { 
-        
-
+    public void testIsAlpha() {         
         assertTrue("'123' isn't alphabetic", VariableExpression.isAlpha("123"));
         assertTrue("'ab123' isn't alphabetic", VariableExpression.isAlpha("ab123"));
         assertTrue("'x' is alphabetic", VariableExpression.isAlpha("x"));
         assertTrue("'X' is alphabetic", VariableExpression.isAlpha("X"));
         assertTrue("'XYZabcd' is alphabetic", VariableExpression.isAlpha("XYZabcd"));
-        assertTrue("'@#$@#%;;e' isn't alphabetic", VariableExpression.isAlpha("@#$@#%;;e"));
-        
-        
+        assertTrue("'@#$@#%;;e' isn't alphabetic", VariableExpression.isAlpha("@#$@#%;;e"));               
     } 
     
     // TODO tests for Expression

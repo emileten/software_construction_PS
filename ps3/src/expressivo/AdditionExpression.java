@@ -30,6 +30,30 @@ public class AdditionExpression implements Expression {
         return false;
     }
     
+    @Override 
+    public String toString(){
+        String additionString = new String(expr1.toString() + "+" + expr2.toString());
+        return additionString;
+    }
+    
+    
+    @Override 
+    public boolean equals(Object thatObject){       
+        if (thatObject instanceof AdditionExpression){
+            if (((AdditionExpression) thatObject).expr1==this.expr1 && ((AdditionExpression) thatObject).expr2==this.expr2){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }       
+    }
+    
+    @Override
+    public int hashCode(){
+        return expr1.hashCode()*31 + expr2.hashCode();
+    }
     
 //    /**
 //    * Sum two expressions. 
