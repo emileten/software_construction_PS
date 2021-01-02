@@ -17,7 +17,7 @@ package expressivo;
 public interface Expression {
     
     // Datatype definition
-    //   TODO
+    // Expression = Empty + Constant(double) + Variable(String) + Addition(Expression,Expression) + Multiplication(Expression, Expression) 
     
     /**
      * Parse an expression.
@@ -52,6 +52,23 @@ public interface Expression {
     @Override
     public int hashCode();
     
+    /** Check if an expression is empty, i.e, equivalent to zero.  
+    * @return true this Expression is empty, i.e, equivalent to zero.
+    */
+    public boolean isEmpty();
+
+    /** Check if this expression is a symbolic variable.
+    * @return true if this Expression is a symbolic variable. 
+    */
+    public boolean isVariable();
+    
+    
+    /** Check if this expression is a constant double. 
+    * @return true this Expression is a constant double. 
+    */
+    public boolean isConstant();
+    
+        
     // TODO more instance methods
     
 }
