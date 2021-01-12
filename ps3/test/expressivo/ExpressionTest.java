@@ -14,6 +14,18 @@ public class ExpressionTest {
 
     // Testing strategy 
     
+    // parse()
+    // single number :  5
+    // single number, with decimals : 5.45 
+    // single number with useless zeros decimals : 5.00
+    // single variable : x
+    // addition of two numbers : 5+7
+    // addition of two variables : x+y 
+    // addition of number and variable : 5+y
+    // same as above but for product : 5*y
+    // combination of product and addition with symbols and numbers and parenthesis : (5+7*y)+10.45*x
+    // same as above but with spaces ( 5 + 7 * y ) + 10.45 * x
+    
     // HashCode() and equals()
     // 'general case' : x*2*3 + y != x*6 + y + 0.2
     // 1+x != x+1
@@ -55,6 +67,22 @@ public class ExpressionTest {
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
+    }
+
+    @Test
+    public void testExpressionParse() {        
+   
+        Expression.parse("5");
+        Expression.parse("5.45");
+        Expression.parse("5.00");
+        Expression.parse("x");
+        Expression.parse("5+7");
+        Expression.parse("x+y");
+        Expression.parse("5+y");
+        Expression.parse("5*y");
+        Expression.parse("(5+7*y)+10.45*x");
+        Expression.parse("( 5 + 7 * y ) + 10.45 * x");
+        
     }
     
     @Test
