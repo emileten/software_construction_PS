@@ -1,8 +1,14 @@
 package expressivo.parser;
 import expressivo.Expression;
 import expressivo.AdditionExpression;
+import expressivo.MultiplicationExpression;
+import expressivo.ConstantExpression;
+import expressivo.VariableExpression;
 import java.util.Stack;
 import java.util.List;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ErrorNode;
 
 /** Make a IntegerExpresion value from a parse tree. */
 public class MakeExpression implements ExpressionListener {
@@ -43,70 +49,67 @@ public class MakeExpression implements ExpressionListener {
         // already on top of the stack
     }
 
-    @Override public void exitExpr(ExpressionParser.ExprContext context) {  
-        // matched the sum | product rule
-       
-        if(context.sum() != null){
-            // do nothing
-        } else if (context.product() != null) {
-            // do nothing
-        }
-        
-        List<IntegerExpressionParser.PrimitiveContext> addends = context.primitive();
+    @Override public void exitSum(ExpressionParser.SumContext context) {  
+        // matched the primitive ('+' primitive)* rule
+        List<ExpressionParser.PrimitiveContext> addends = context.primitive();
         assert stack.size() >= addends.size();
 
         // the pattern above always has at least 1 child;
         // pop the last child
         assert addends.size() > 0;
-        IntegerExpression expr = stack.pop();
+        Expression sum = stack.pop();
 
         // pop the older children, one by one, and add them on
         for (int i = 1; i < addends.size(); ++i) {
-            expr = new Plus(stack.pop(), expr);
+            sum = new AdditionExpression(stack.pop(), sum);
         }
 
-        // the result is this subtree's Expression
-        stack.push(expr);
-    }    
+        // the result is this subtree's IntegerExpression
+        stack.push(sum);
+    }
+    
+    @Override public void exitProduct(ExpressionParser.ProductContext context) {  
+        // matched the primitive ('*' primitive)* rule
+        List<ExpressionParser.PrimitiveContext> addends = context.primitive();
+        assert stack.size() >= addends.size();
+
+        // the pattern above always has at least 1 child;
+        // pop the last child
+        assert addends.size() > 0;
+        Expression product = stack.pop();
+
+        // pop the older children, one by one, and add them on
+        for (int i = 1; i < addends.size(); ++i) {
+            product = new MultiplicationExpression(stack.pop(), product);
+        }
+
+        // the result is this subtree's IntegerExpression
+        stack.push(product);
+    }
    
-//    @Override public void exitSum(IntegerExpressionParser.SumContext context) {  
-//        // matched the primitive ('+' primitive)* rule
-//        List<IntegerExpressionParser.PrimitiveContext> addends = context.primitive();
-//        assert stack.size() >= addends.size();
-//
-//        // the pattern above always has at least 1 child;
-//        // pop the last child
-//        assert addends.size() > 0;
-//        IntegerExpression sum = stack.pop();
-//
-//        // pop the older children, one by one, and add them on
-//        for (int i = 1; i < addends.size(); ++i) {
-//            sum = new Plus(stack.pop(), sum);
-//        }
-//
-//        // the result is this subtree's IntegerExpression
-//        stack.push(sum);
-//    }
-//
-//    @Override public void exitPrimitive(IntegerExpressionParser.PrimitiveContext context) {
-//        if (context.NUMBER() != null) {
-//            // matched the NUMBER alternative
-//            int n = Integer.valueOf(context.NUMBER().getText());
-//            IntegerExpression number = new Number(n);
-//            stack.push(number);
-//        } else {
-//            // matched the '(' sum ')' alternative
-//            // do nothing, because sum's value is already on the stack
-//        }
-//    }
-//
-//    // don't need these here, so just make them empty implementations
-//    @Override public void enterRoot(IntegerExpressionParser.RootContext context) { }
-//    @Override public void enterSum(IntegerExpressionParser.SumContext context) { }
-//    @Override public void enterPrimitive(IntegerExpressionParser.PrimitiveContext context) { }
-//
-//    @Override public void visitTerminal(TerminalNode terminal) { }
-//    @Override public void enterEveryRule(ParserRuleContext context) { }
-//    @Override public void exitEveryRule(ParserRuleContext context) { }
-//    @Override public void visitErrorNode(ErrorNode node) { }         
+    @Override public void exitPrimitive(ExpressionParser.PrimitiveContext context) {
+        if (context.NUMBER() != null) {
+            // matched the NUMBER alternative
+            int n = Integer.valueOf(context.NUMBER().getText());
+            Expression number = new ConstantExpression(n);
+            stack.push(number);
+        } else if (context.VARIABLE() != null) {
+            String s = new String(context.VARIABLE().getText());
+            Expression variable = new VariableExpression(s);
+            stack.push(variable);
+        } else {
+            // matched the '(' sum ')' alternative or the '(' product ')' alternative
+            // do nothing, because sum's value or product's value is already on the stack
+        }
+    }
+
+    @Override public void enterRoot(ExpressionParser.RootContext context) { }
+    @Override public void enterSum(ExpressionParser.SumContext context) { }
+    @Override public void enterProduct(ExpressionParser.ProductContext context) { }
+    @Override public void enterPrimitive(ExpressionParser.PrimitiveContext context) { }
+
+    @Override public void visitTerminal(TerminalNode terminal) { }
+    @Override public void enterEveryRule(ParserRuleContext context) { }
+    @Override public void exitEveryRule(ParserRuleContext context) { }
+    @Override public void visitErrorNode(ErrorNode node) { }         
 }

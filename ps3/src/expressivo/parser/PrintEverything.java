@@ -13,13 +13,6 @@ public class PrintEverything implements ExpressionListener {
     @Override public void exitRoot(ExpressionParser.RootContext context) {
         System.err.println("exiting root");
     }
-
-    @Override public void enterExpr(ExpressionParser.ExprContext context) {
-        System.err.println("entering expr");
-    }
-    @Override public void exitExpr(ExpressionParser.ExprContext context) {
-        System.err.println("exiting expr");
-    }
     
     @Override public void enterSum(ExpressionParser.SumContext context) {
         System.err.println("entering sum");
@@ -27,7 +20,6 @@ public class PrintEverything implements ExpressionListener {
     @Override public void exitSum(ExpressionParser.SumContext context) {
         System.err.println("exiting sum");
     }
-    
     
     @Override public void enterProduct(ExpressionParser.ProductContext context) {
         System.err.println("entering product");
