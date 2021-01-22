@@ -17,11 +17,6 @@ public class VariableExpression implements Expression {
     }
     
     @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
     public boolean isVariable() {
         return true;
     }

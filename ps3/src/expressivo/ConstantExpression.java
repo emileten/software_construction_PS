@@ -16,11 +16,6 @@ public class ConstantExpression implements Expression {
         this.value = value;
     }
     @Override
-    public boolean isEmpty() {
-        return value==0;
-    }
-
-    @Override
     public boolean isVariable() {
         return false;
     }

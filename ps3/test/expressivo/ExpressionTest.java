@@ -38,11 +38,7 @@ public class ExpressionTest {
     
     // toString()
     // (x * 6) + (y + 0.2) --> "x*6 + y + 0.2"
-    
-    // isEmpty()
-    // "" -> empty
-    // "x*3" -> non-empty
-    
+     
     // isVariable()
     // x --> true
     // y --> true
@@ -108,25 +104,19 @@ public class ExpressionTest {
     } 
     
     @Test
-    public void testExpressionIsEmpty() {   
-        assertTrue("this should be an empty expression", Expression.parse("").isEmpty());
-        assertFalse("this should be a non-empty expression", Expression.parse("x*3").isEmpty());      
-    } 
-    
-    @Test
     public void testExpressionIsVariable() {        
-        assertTrue("this should be a variable", Expression.parse("x").isEmpty());
-        assertTrue("this should be a variable", Expression.parse("y").isEmpty());
-        assertFalse("this should not be a variable", Expression.parse("3").isEmpty());
-        assertFalse("this should not be a variable", Expression.parse("x*3").isEmpty());   
+        assertTrue("this should be a variable", Expression.parse("x").isVariable());
+        assertTrue("this should be a variable", Expression.parse("y").isVariable());
+        assertFalse("this should not be a variable", Expression.parse("3").isVariable());
+        assertFalse("this should not be a variable", Expression.parse("x*3").isVariable());   
     } 
     
     @Test
     public void testExpressionIsConstant() {        
-        assertTrue("this should be a constant", Expression.parse("3").isEmpty());
-        assertTrue("this should be a constant", Expression.parse("4").isEmpty());
-        assertFalse("this should not be a constant", Expression.parse("3+4").isEmpty());
-        assertFalse("this should not be a constant", Expression.parse("x*3").isEmpty());            
+        assertTrue("this should be a constant", Expression.parse("3").isConstant());
+        assertTrue("this should be a constant", Expression.parse("4").isConstant());
+        assertFalse("this should not be a constant", Expression.parse("3+4").isConstant());
+        assertFalse("this should not be a constant", Expression.parse("x*3").isConstant());            
     } 
     
     

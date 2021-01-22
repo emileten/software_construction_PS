@@ -15,10 +15,6 @@ public class AdditionExpression implements Expression {
         this.expr1 = expr1;
         this.expr2 = expr2;
     }
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
 
     @Override
     public boolean isVariable() {
