@@ -47,25 +47,9 @@ public class MakeExpression implements ExpressionListener {
         // matched the sum | product rule
        
         if(context.sum() != null){
-
-            List<ExpressionParser.SumContext> addends = context.sum();
-            assert stack.size() >= addends.size();
-
-            // the pattern above always has at least 1 child;
-            // pop the last child
-            assert addends.size() > 0;
-            Expression sum = stack.pop();
-
-            // pop the older children, one by one, and add them on
-            for (int i = 1; i < addends.size(); ++i) {
-                sum = new AdditionExpression(stack.pop(), sum);
-            }
-
-            // the result is this subtree's Expression
-            stack.push(sum);
-            
-        } else {
-            
+            // do nothing
+        } else if (context.product() != null) {
+            // do nothing
         }
         
         List<IntegerExpressionParser.PrimitiveContext> addends = context.primitive();
