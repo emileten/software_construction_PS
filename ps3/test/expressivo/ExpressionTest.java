@@ -66,18 +66,76 @@ public class ExpressionTest {
     }
 
     @Test
-    public void testExpressionParse() {        
+    public void testExpressionParseIntegersNoOp() {        
    
         Expression.parse("5");
-        Expression.parse("5.45");
-        Expression.parse("5.00");
+        Expression.parse("43");
+        
+    }
+    
+    @Test
+    public void testExpressionParseSymbolsNoOp() {        
+   
         Expression.parse("x");
+        Expression.parse("y");
+        
+    }
+    
+    @Test
+    public void testExpressionParseIntegersOneOp() {        
+   
         Expression.parse("5+7");
-        Expression.parse("x+y");
-        Expression.parse("5+y");
-        Expression.parse("5*y");
-        Expression.parse("(5+7*y)+10.45*x");
-        Expression.parse("( 5 + 7 * y ) + 10.45 * x");
+        Expression.parse("8+9");
+       
+    }
+    
+    
+    @Test
+    public void testExpressionParseIntegersOneOpParenthesisSpace() {        
+   
+        Expression.parse("(5+7)");
+        Expression.parse("(3+4    )");
+       
+    }
+    
+    
+    @Test
+    public void testExpressionParseIntegersTwoOp() {        
+   
+        Expression.parse("5+5+3");
+        Expression.parse("(2+3    )+    (    4+5    )");
+        
+    }
+    
+    @Test
+    public void testExpressionParseDecimals() {        
+   
+        Expression.parse("5.45");
+        
+    }
+    
+    
+    @Test
+    public void testExpressionParseIntegersTwoOpProd() {        
+   
+        Expression.parse("5*5*3");
+        Expression.parse("(2*3    )+    (    4*5    )");
+        
+    }
+    
+    @Test
+    public void testExpressionParseIntegersMixedOp() {        
+   
+        Expression.parse("5*5+3");
+        Expression.parse("(2*3    )+    (    4*5    )");
+        
+    }
+    
+    @Test
+    public void testExpressionParseIntegersMixedOpConsVar() {        
+   
+        Expression.parse("x*5+y");
+        Expression.parse("(x*3    )+    (    y*5    )");
         
     }
     
@@ -122,12 +180,12 @@ public class ExpressionTest {
     
     @Test
     public void testIsAlpha() {         
-        assertTrue("'123' isn't alphabetic", VariableExpression.isAlpha("123"));
-        assertTrue("'ab123' isn't alphabetic", VariableExpression.isAlpha("ab123"));
+        assertFalse("'123' isn't alphabetic", VariableExpression.isAlpha("123"));
+        assertFalse("'ab123' isn't alphabetic", VariableExpression.isAlpha("ab123"));
         assertTrue("'x' is alphabetic", VariableExpression.isAlpha("x"));
         assertTrue("'X' is alphabetic", VariableExpression.isAlpha("X"));
         assertTrue("'XYZabcd' is alphabetic", VariableExpression.isAlpha("XYZabcd"));
-        assertTrue("'@#$@#%;;e' isn't alphabetic", VariableExpression.isAlpha("@#$@#%;;e"));               
+        assertFalse("'@#$@#%;;e' isn't alphabetic", VariableExpression.isAlpha("@#$@#%;;e"));               
     } 
     
     // TODO tests for Expression
