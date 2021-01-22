@@ -30,7 +30,7 @@ import Configuration;
  * how to use Antlr and has links to reference information.
  */
  
-root : sum | product EOF;
+root : sum | product | sum+ product+ EOF;
 sum : primitive ('+' primitive)*;
 product : primitive ('*' primitive)*;
 primitive : NUMBER | VARIABLE | '(' sum ')' | '(' product ')';
