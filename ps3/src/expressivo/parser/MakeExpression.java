@@ -90,7 +90,7 @@ public class MakeExpression implements ExpressionListener {
     @Override public void exitPrimitive(ExpressionParser.PrimitiveContext context) {
         if (context.NUMBER() != null) {
             // matched the NUMBER alternative
-            int n = Integer.valueOf(context.NUMBER().getText());
+            double n = Double.valueOf(context.NUMBER().getText());
             Expression number = new ConstantExpression(n);
             stack.push(number);
         } else if (context.VARIABLE() != null) {
