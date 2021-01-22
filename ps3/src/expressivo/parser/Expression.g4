@@ -34,7 +34,7 @@ root : sum | product EOF;
 sum : primitive ('+' primitive)*;
 product : primitive ('*' primitive)*;
 primitive : NUMBER | VARIABLE | '(' sum ')' | '(' product ')';
-NUMBER : [0-9]+;
+NUMBER : [0-9]+ ('.' [0-9]+)?;
 VARIABLE : [a-zA-Z]+; 
 
 /* 
