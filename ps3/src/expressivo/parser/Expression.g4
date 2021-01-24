@@ -30,19 +30,20 @@ import Configuration;
  * how to use Antlr and has links to reference information.
  */
  
-root : sum | product | sum+ product+ EOF;
-sum : primitive ('+' primitive)*;
-product : primitive ('*' primitive)*;
-primitive : NUMBER | VARIABLE | '(' sum ')' | '(' product ')';
-NUMBER : [0-9]+ ('.' [0-9]+)?;
-VARIABLE : [a-zA-Z]+; 
-
-/* 
-*root : expr EOF;
-*expr :  NUMBER | VARIABLE | sum | product | '(' expr ')' ;
-*sum : expr ('+' expr);
-*product : expr ('*' expr);
+/*root : expr EOF;
+*expr : NUMBER | VARIABLE | expr '*' expr | expr '+' expr;
+*NUMBER : [0-9]+ ('.' [0-9]+)?;
+*VARIABLE : [a-zA-Z]+; 
 */
+
+
+ 
+root : expr EOF;
+expr :  primitive ('*' primitive)* ('+' primitive)*;
+primitive : NUMBER | VARIABLE | '(' expr ')';
+NUMBER : [0-9]+ ('.' [0-9]+)?;
+VARIABLE : [a-zA-Z]+;
+
 
 
 /* Tell Antlr to ignore spaces around tokens. */

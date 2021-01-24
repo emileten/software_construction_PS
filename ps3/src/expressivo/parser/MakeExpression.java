@@ -49,43 +49,47 @@ public class MakeExpression implements ExpressionListener {
         // already on top of the stack
     }
 
-    @Override public void exitSum(ExpressionParser.SumContext context) {  
-        // matched the primitive ('+' primitive)* rule
-        List<ExpressionParser.PrimitiveContext> addends = context.primitive();
-        assert stack.size() >= addends.size();
+    @Override public void exitExpr(ExpressionParser.ExprContext context) {  
 
-        // the pattern above always has at least 1 child;
-        // pop the last child
-        assert addends.size() > 0;
-        Expression sum = stack.pop();
-
-        // pop the older children, one by one, and add them on
-        for (int i = 1; i < addends.size(); ++i) {
-            sum = new AdditionExpression(stack.pop(), sum);
+        if (context.toString().contains("*")){ // matched the primitive ('*' primitive)* rule        
+            List<ExpressionParser.PrimitiveContext> addends = context.primitive();
+            assert stack.size() >= addends.size();
+            // the pattern above always has at least 1 child;
+            // pop the last child
+            assert addends.size() > 0;
+            Expression product = stack.pop();
+            // pop the older children, one by one, and add them on
+            for (int i = 1; i < addends.size(); ++i) {
+                product = new MultiplicationExpression(stack.pop(), product);
+            }
+            // the result is this subtree's Expression
+            stack.push(product);
+        } else if (context.toString().contains("+")){ // matched the primitive ('+' primitive)* rule
+            List<ExpressionParser.PrimitiveContext> addends = context.primitive();
+            assert stack.size() >= addends.size();
+            // the pattern above always has at least 1 child;
+            // pop the last child
+            assert addends.size() > 0;
+            Expression sum = stack.pop();
+            // pop the older children, one by one, and add them on
+            for (int i = 1; i < addends.size(); ++i) {
+                sum = new AdditionExpression(stack.pop(), sum);
+            }
+            // the result is this subtree's Expression
+            stack.push(sum);    
+        } else { // matched the primitive rule
+            List<ExpressionParser.PrimitiveContext> addends = context.primitive();
+            assert stack.size() >= addends.size();
+            // the pattern above always has at least 1 child;
+            // pop the last child
+            assert addends.size() > 0;
+            Expression oneprimitive = stack.pop();
+            stack.push(oneprimitive); 
         }
-
-        // the result is this subtree's IntegerExpression
-        stack.push(sum);
+        
+        
     }
     
-    @Override public void exitProduct(ExpressionParser.ProductContext context) {  
-        // matched the primitive ('*' primitive)* rule
-        List<ExpressionParser.PrimitiveContext> addends = context.primitive();
-        assert stack.size() >= addends.size();
-
-        // the pattern above always has at least 1 child;
-        // pop the last child
-        assert addends.size() > 0;
-        Expression product = stack.pop();
-
-        // pop the older children, one by one, and add them on
-        for (int i = 1; i < addends.size(); ++i) {
-            product = new MultiplicationExpression(stack.pop(), product);
-        }
-
-        // the result is this subtree's IntegerExpression
-        stack.push(product);
-    }
    
     @Override public void exitPrimitive(ExpressionParser.PrimitiveContext context) {
         if (context.NUMBER() != null) {
@@ -98,14 +102,13 @@ public class MakeExpression implements ExpressionListener {
             Expression variable = new VariableExpression(s);
             stack.push(variable);
         } else {
-            // matched the '(' sum ')' alternative or the '(' product ')' alternative
+            // matched the '(' expr ')' alternative
             // do nothing, because sum's value or product's value is already on the stack
         }
     }
 
     @Override public void enterRoot(ExpressionParser.RootContext context) { }
-    @Override public void enterSum(ExpressionParser.SumContext context) { }
-    @Override public void enterProduct(ExpressionParser.ProductContext context) { }
+    @Override public void enterExpr(ExpressionParser.ExprContext context) { }
     @Override public void enterPrimitive(ExpressionParser.PrimitiveContext context) { }
 
     @Override public void visitTerminal(TerminalNode terminal) { }

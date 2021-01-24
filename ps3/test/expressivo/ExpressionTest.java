@@ -144,8 +144,10 @@ public class ExpressionTest {
     @Test
     public void testExpressionParseIntegersMixedOpConsVarNoGuide() {        
    
-        Expression.parse("5*5+3");
-        Expression.parse("5+5*3*4");
+        //Expression.parse("5*5+3");
+        //Expression.parse("5*(5+3)");
+        Expression.parse("5+5*3");
+        //Expression.parse("5+5*3*4");
         
     }
 //
