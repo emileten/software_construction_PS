@@ -16,15 +16,15 @@ public class VariableExpression implements Expression {
         this.symbol = symbol;
     }
     
-    @Override
-    public boolean isVariable() {
-        return true;
-    }
-
-    @Override
-    public boolean isConstant() {
-        return false;
-    }
+//    @Override
+//    public boolean isVariable() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isConstant() {
+//        return false;
+//    }
     
     public void checkRep(){     
         assertTrue("this should be a case-sensitive nonempty string of letters", isAlpha(this.symbol));      

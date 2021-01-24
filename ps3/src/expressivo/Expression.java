@@ -114,18 +114,20 @@ public interface Expression {
     @Override
     public int hashCode();
     
-    /** Check if this expression is a symbolic variable.
-    * @return true if this Expression is a symbolic variable. 
-    */
-    public boolean isVariable();
-    
-    
-    /** Check if this expression is a constant double. 
-    * @return true this Expression is a constant double. 
-    */
-    public boolean isConstant();
-    
+//    /** Check if this expression is a symbolic variable.
+//    * @return true if this Expression is a symbolic variable. 
+//    */
+//    public boolean isVariable();
+//    
+//    
+//    /** Check if this expression is a constant double. 
+//    * @return true this Expression is a constant double. 
+//    */
+//    public boolean isConstant();
+//    
         
-    // TODO more instance methods
+    // TODO parser is wrong. The string value of a parsed expression is always just the first element of it... But tostring works for an expression built by hand.  
+    // TODO allow for parenthesis around unique element
+    // TODO something going on : write x*1 parses and prints x*1.0. Some integer to double conversion is the culprit. 
     
 }

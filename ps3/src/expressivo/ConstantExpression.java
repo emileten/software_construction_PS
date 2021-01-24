@@ -15,15 +15,15 @@ public class ConstantExpression implements Expression {
     public ConstantExpression(double value){
         this.value = value;
     }
-    @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
-    public boolean isConstant() {
-        return true;
-    }
+//    @Override
+//    public boolean isVariable() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isConstant() {
+//        return true;
+//    }
     
     public void checkRep(){        
         assertTrue("this should be a nonnegative integer or floating point number", this.value>=0);        

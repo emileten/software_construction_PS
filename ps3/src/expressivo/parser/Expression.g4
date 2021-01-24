@@ -31,7 +31,7 @@ import Configuration;
  */
  
 root : expr EOF;
-expr : NUMBER | VARIABLE | expr '*' expr | expr '+' expr;
+expr : NUMBER | VARIABLE | expr '*' expr | '(' expr '*' expr ')' | expr '+' expr | '('  expr '+' expr ')';
 NUMBER : [0-9]+ ('.' [0-9]+)?;
 VARIABLE : [a-zA-Z]+; 
 

@@ -16,15 +16,15 @@ public class MultiplicationExpression implements Expression {
         this.expr2 = expr2; 
     }
     
-    @Override
-    public boolean isVariable() {
-        return false;
-    }
-
-    @Override
-    public boolean isConstant() {
-        return false;
-    }
+//    @Override
+//    public boolean isVariable() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isConstant() {
+//        return false;
+//    }
 
     @Override 
     public String toString(){
