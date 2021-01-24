@@ -5,7 +5,7 @@ import expressivo.MultiplicationExpression;
 import expressivo.ConstantExpression;
 import expressivo.VariableExpression;
 import java.util.Stack;
-import java.util.List;
+//import java.util.List;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -51,49 +51,13 @@ public class MakeExpression implements ExpressionListener {
 
     @Override public void exitExpr(ExpressionParser.ExprContext context) {  
 
-        if (context.toString().contains("*")){ // matched the primitive ('*' primitive)* rule        
-            List<ExpressionParser.PrimitiveContext> addends = context.primitive();
-            assert stack.size() >= addends.size();
-            // the pattern above always has at least 1 child;
-            // pop the last child
-            assert addends.size() > 0;
-            Expression product = stack.pop();
-            // pop the older children, one by one, and add them on
-            for (int i = 1; i < addends.size(); ++i) {
-                product = new MultiplicationExpression(stack.pop(), product);
-            }
-            // the result is this subtree's Expression
-            stack.push(product);
-        } else if (context.toString().contains("+")){ // matched the primitive ('+' primitive)* rule
-            List<ExpressionParser.PrimitiveContext> addends = context.primitive();
-            assert stack.size() >= addends.size();
-            // the pattern above always has at least 1 child;
-            // pop the last child
-            assert addends.size() > 0;
-            Expression sum = stack.pop();
-            // pop the older children, one by one, and add them on
-            for (int i = 1; i < addends.size(); ++i) {
-                sum = new AdditionExpression(stack.pop(), sum);
-            }
-            // the result is this subtree's Expression
+        if (context.toString().contains("*")){      
+            Expression product = new MultiplicationExpression(stack.pop(), stack.pop());
+            stack.push(product);  
+        } else if (context.toString().contains("+")){ 
+            Expression sum = new AdditionExpression(stack.pop(), stack.pop());
             stack.push(sum);    
-        } else { // matched the primitive rule
-            List<ExpressionParser.PrimitiveContext> addends = context.primitive();
-            assert stack.size() >= addends.size();
-            // the pattern above always has at least 1 child;
-            // pop the last child
-            assert addends.size() > 0;
-            Expression oneprimitive = stack.pop();
-            stack.push(oneprimitive); 
-        }
-        
-        
-    }
-    
-   
-    @Override public void exitPrimitive(ExpressionParser.PrimitiveContext context) {
-        if (context.NUMBER() != null) {
-            // matched the NUMBER alternative
+        } else if (context.NUMBER() != null) {
             double n = Double.valueOf(context.NUMBER().getText());
             Expression number = new ConstantExpression(n);
             stack.push(number);
@@ -101,15 +65,31 @@ public class MakeExpression implements ExpressionListener {
             String s = new String(context.VARIABLE().getText());
             Expression variable = new VariableExpression(s);
             stack.push(variable);
-        } else {
-            // matched the '(' expr ')' alternative
-            // do nothing, because sum's value or product's value is already on the stack
         }
+                
+        
     }
+    
+   
+//    @Override public void exitPrimitive(ExpressionParser.PrimitiveContext context) {
+//        if (context.NUMBER() != null) {
+//            // matched the NUMBER alternative
+//            double n = Double.valueOf(context.NUMBER().getText());
+//            Expression number = new ConstantExpression(n);
+//            stack.push(number);
+//        } else if (context.VARIABLE() != null) {
+//            String s = new String(context.VARIABLE().getText());
+//            Expression variable = new VariableExpression(s);
+//            stack.push(variable);
+//        } else {
+//            // matched the '(' expr ')' alternative
+//            // do nothing, because sum's value or product's value is already on the stack
+//        }
+//    }
 
     @Override public void enterRoot(ExpressionParser.RootContext context) { }
     @Override public void enterExpr(ExpressionParser.ExprContext context) { }
-    @Override public void enterPrimitive(ExpressionParser.PrimitiveContext context) { }
+//    @Override public void enterPrimitive(ExpressionParser.PrimitiveContext context) { }
 
     @Override public void visitTerminal(TerminalNode terminal) { }
     @Override public void enterEveryRule(ParserRuleContext context) { }

@@ -21,12 +21,12 @@ public class PrintEverything implements ExpressionListener {
         System.err.println("exiting expr");
     }
 
-    @Override public void enterPrimitive(ExpressionParser.PrimitiveContext context) {
-        System.err.println("entering primitive");
-    }
-    @Override public void exitPrimitive(ExpressionParser.PrimitiveContext context) {
-        System.err.println("exiting primitive");
-    }
+//    @Override public void enterPrimitive(ExpressionParser.PrimitiveContext context) {
+//        System.err.println("entering primitive");
+//    }
+//    @Override public void exitPrimitive(ExpressionParser.PrimitiveContext context) {
+//        System.err.println("exiting primitive");
+//    }
 
     @Override public void visitTerminal(TerminalNode terminal) {
         System.err.println("terminal " + terminal.getText());            
